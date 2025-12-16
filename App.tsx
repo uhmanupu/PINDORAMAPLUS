@@ -5,8 +5,8 @@ import axios from 'axios';
 interface Movie {
   id: number;
   title: string;
-  overview: string; // TMDB usa 'overview' para a sinopse
-  poster_path: string | null; // Usaremos no futuro para as imagens
+  overview: string; 
+  poster_path: string | null; 
 }
 
 // 2. Interface para a resposta completa do TMDB (contém o array 'results')
@@ -14,9 +14,9 @@ interface TMDBResponse {
     results: Movie[];
 }
 
+// A CHAVE É AGORA BUSCADA DE UMA VARIÁVEL DE AMBIENTE (REQUERIDO PELO VERCEL/REACT)
+const TMDB_KEY = process.env.REACT_APP_TMDB_KEY; 
 
-// Sua chave de API, agora diretamente no código (PARA TESTE, idealmente em variáveis de ambiente)
-const TMDB_KEY = "8896b0775ab7c42f8e5d105a36a92d7a"; 
 // Endpoint: Filmes Populares, com chave e em Português-BR
 const apiUrl = `https://api.themoviedb.org/3/movie/popular?api_key=${TMDB_KEY}&language=pt-BR`; 
 
@@ -26,9 +26,16 @@ const App: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
+    // Adicione uma verificação de segurança, caso a variável de ambiente não esteja definida
+    if (!TMDB_KEY) {
+        console.error("Erro: A chave TMDB não foi definida na Variável de Ambiente.");
+        setLoading(false);
+        return;
+    }
+
     axios.get<TMDBResponse>(apiUrl)
       .then(response => {
-        // 3. ATENÇÃO: A lista de filmes está em response.data.results
+        // A lista de filmes está em response.data.results
         setMovies(response.data.results); 
         setLoading(false);
       })
@@ -64,7 +71,6 @@ const App: React.FC = () => {
         >
           <h2>🎬 {movie.title}</h2>
           <p>ID: {movie.id}</p>
-          {/* Agora usamos 'movie.overview' para a sinopse */}
           <p>Sinopse: {movie.overview || "Sinopse não disponível."}</p>
         </div>
       ))}
@@ -72,3 +78,4 @@ const App: React.FC = () => {
   );
 };
 
+export default App;
