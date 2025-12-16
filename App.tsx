@@ -14,8 +14,8 @@ interface TMDBResponse {
     results: Movie[];
 }
 
-// A CHAVE É AGORA BUSCADA DE UMA VARIÁVEL DE AMBIENTE (REQUERIDO PELO VERCEL/REACT)
-const TMDB_KEY = process.env.REACT_APP_TMDB_KEY; 
+// FORÇANDO A CHAVE DE API DIRETAMENTE NO CÓDIGO para contornar o problema da Variável de Ambiente
+const TMDB_KEY = "8896b0775ab7c42f8e5d105a36a92d7a"; 
 
 // Endpoint: Filmes Populares, com chave e em Português-BR
 const apiUrl = `https://api.themoviedb.org/3/movie/popular?api_key=${TMDB_KEY}&language=pt-BR`; 
@@ -26,9 +26,9 @@ const App: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    // Adicione uma verificação de segurança, caso a variável de ambiente não esteja definida
+    // Verificação de segurança (menos importante agora que a chave está fixa)
     if (!TMDB_KEY) {
-        console.error("Erro: A chave TMDB não foi definida na Variável de Ambiente.");
+        console.error("Erro: A chave TMDB não foi definida.");
         setLoading(false);
         return;
     }
