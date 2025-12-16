@@ -1,0 +1,7 @@
+{
+  "name": "P+",
+  "description": "Uma plataforma de streaming inspirada no Disney+, com descoberta de conteúdo via IA e interface imersiva estilo glassmorphism.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
